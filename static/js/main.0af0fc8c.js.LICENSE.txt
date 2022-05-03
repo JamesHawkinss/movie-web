@@ -44,6 +44,8 @@ object-assign
 
 /*! ../task-loop */
 
+/*! ../types/cmcd */
+
 /*! ../types/level */
 
 /*! ../types/loader */
@@ -117,6 +119,8 @@ object-assign
 /*! ./controller/buffer-controller */
 
 /*! ./controller/cap-level-controller */
+
+/*! ./controller/cmcd-controller */
 
 /*! ./controller/eme-controller */
 
@@ -218,6 +222,8 @@ object-assign
 
 /*! exports provided: BufferHelper */
 
+/*! exports provided: CMCDVersion, CMCDObjectType, CMCDStreamingFormat, CMCDStreamType */
+
 /*! exports provided: ChunkMetadata */
 
 /*! exports provided: ElementaryStreamTypes, BaseSegment, Fragment, Part */
@@ -274,7 +280,7 @@ object-assign
 
 /*! exports provided: fetchSupported, default */
 
-/*! exports provided: findFirstFragWithCC, shouldAlignOnDiscontinuities, findDiscontinuousReferenceFrag, adjustSlidingStart, alignStream, alignPDT */
+/*! exports provided: findFirstFragWithCC, shouldAlignOnDiscontinuities, findDiscontinuousReferenceFrag, adjustSlidingStart, alignStream, alignPDT, alignFragmentByPDTDelta, alignMediaPlaylistByPDT */
 
 /*! exports provided: findFragmentByPDT, findFragmentByPTS, fragmentWithinToleranceTest, pdtWithinToleranceTest, findFragWithCC */
 
@@ -338,6 +344,10 @@ object-assign
 
 /*!***************************!*\
         !*** ./src/demux/adts.ts ***!
+        \***************************/
+
+/*!***************************!*\
+        !*** ./src/types/cmcd.ts ***!
         \***************************/
 
 /*!***************************!*\
@@ -579,6 +589,10 @@ object-assign
 /*!******************************************!*\
         !*** ./src/remux/passthrough-remuxer.ts ***!
         \******************************************/
+
+/*!*******************************************!*\
+        !*** ./src/controller/cmcd-controller.ts ***!
+        \*******************************************/
 
 /*!*******************************************!*\
         !*** ./src/demux/transmuxer-interface.ts ***!
