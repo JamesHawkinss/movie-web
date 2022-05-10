@@ -6,7 +6,7 @@ import {
   MWQuery,
   MWProviderMediaResult,
   MWMediaStreamType,
-  MWMediaSeasons
+  MWMediaSeasons,
 } from "providers/types";
 
 export const streamytkProvider: MWMediaProvider = {
@@ -15,42 +15,51 @@ export const streamytkProvider: MWMediaProvider = {
   type: [MWMediaType.MOVIE, MWMediaType.MOVIE],
   displayName: "streamy.tk",
 
-  async getMediaFromPortable(media: MWPortableMedia): Promise<MWProviderMediaResult> {
+  async getMediaFromPortable(
+    media: MWPortableMedia
+  ): Promise<MWProviderMediaResult> {
     let type = "movie";
-    if (media.mediaType === MWMediaType.SERIES)
-      type = "tv";
+    if (media.mediaType === MWMediaType.SERIES) type = "tv";
     const res = await fetch(
-      `https://streamy.tk/api/item/${type}/${media.mediaId}`,
-    ).then(d => d.json());
+      `https://streamy.tk/api/item/${type}/${media.mediaId}`
+    ).then((d) => d.json());
 
     return {
       ...media,
       title: res.data.title as string,
-      year: (new Date(res.data.title.release_date)).getFullYear().toString(),
+      year: new Date(res.data.title.release_date).getFullYear().toString(),
     };
   },
 
   async searchForMedia(query: MWQuery): Promise<MWProviderMediaResult[]> {
-    // TODO api needs way of searching
-    throw new Error("NO SEARCH POSSIBLE");
+    const params = new URLSearchParams();
+    params.append("query", query.searchQuery); // TODO search for type
+    const res = await fetch(
+      `https://streamy.tk/api/search?${params.toString()}`
+    ).then((d) => d.json());
+    return res.map(
+      (v: any): MWProviderMediaResult => ({
+        mediaId: v.id.toString(),
+        title: v.title,
+        year: "nothing", // TODO add year
+      })
+    );
   },
 
   async getStream(media: MWPortableMedia): Promise<MWMediaStream> {
     let type = "movie";
-    if (media.mediaType === MWMediaType.SERIES)
-      type = "tv";
+    if (media.mediaType === MWMediaType.SERIES) type = "tv";
     const res = await fetch(
-      `https://streamy.tk/api/item/${type}/${media.mediaId}`,
-    ).then(d => d.json());
+      `https://streamy.tk/api/item/${type}/${media.mediaId}`
+    ).then((d) => d.json());
 
     const convertMap = {
-      "application/x-mpegurl": "m3u8"
-    }
+      "application/x-mpegurl": "m3u8",
+    };
     const bestSource = res.sources.find((v: any) => {
-      if (Object.keys(convertMap).includes(v.type))
-        return true;
+      if (Object.keys(convertMap).includes(v.type)) return true;
       return false;
-    }) as undefined | { type: keyof typeof convertMap, src: string }
+    }) as undefined | { type: keyof typeof convertMap; src: string };
     if (!bestSource) {
       throw new Error("No source found for media");
     }
@@ -66,8 +75,8 @@ export const streamytkProvider: MWMediaProvider = {
     media: MWPortableMedia
   ): Promise<MWMediaSeasons> {
     const res = await fetch(
-      `https://streamy.tk/api/item/tv/${media.mediaId}`,
-    ).then(d => d.json());
+      `https://streamy.tk/api/item/tv/${media.mediaId}`
+    ).then((d) => d.json());
 
     // TODO api needs way of finding season data
     throw new Error("NO SEASON DATA POSSIBLE");
